@@ -1,6 +1,6 @@
 #!/bin/sh
 
-: ${REPO=mholt}
+: ${REPO=benizi}
 VERSION=${VERSION:-"0.10.11"}
 
 # caddy
@@ -9,7 +9,7 @@ git clone https://github.com/$REPO/caddy -b "v$VERSION" /go/src/github.com/$REPO
     && git checkout -b "v$VERSION"
 
 # plugin helper
-GOOS=linux GOARCH=amd64 go get -v github.com/abiosoft/caddyplug/caddyplug
+GOOS=linux GOARCH=amd64 go get -v github.com/benizi/caddyplug/caddyplug
 alias caddyplug='GOOS=linux GOARCH=amd64 caddyplug'
 
 # plugins

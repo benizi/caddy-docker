@@ -13,7 +13,7 @@ RUN set -e ; \
 LABEL builder=true cpanm=true \
   perl_modules="${perl_modules}"
 
-FROM abiosoft/caddy:php
+FROM benizi/caddy:php
 LABEL maintainer "Benjamin R. Haskell <docker@benizi.com>"
 ARG perl_apks="perl perl-plack"
 ARG perl_modules=""

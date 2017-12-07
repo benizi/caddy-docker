@@ -1,18 +1,19 @@
 #
 # Builder
 #
-FROM abiosoft/caddy:builder as builder
+FROM benizi/caddy:builder as builder
 
+ARG repo="benizi"
 ARG version="0.10.11"
 ARG plugins="git"
 
-RUN VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
+RUN REPO=${repo} VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
 
 #
 # Final stage
 #
 FROM alpine:3.7
-LABEL maintainer "Abiola Ibrahim <abiola89@gmail.com>"
+LABEL maintainer "Benjamin R. Haskell <docker@benizi.com>"
 
 ARG version="0.10.11"
 LABEL caddy_version="$version"
