@@ -69,6 +69,55 @@ Point your browser to `http://127.0.0.1:2015`.
 ##### Note
 Your `Caddyfile` must include the line `on startup php-fpm7`. For Caddy to be PID 1 in the container, php-fpm7 could not be started.
 
+### Perl
+
+`:[<version>-]perl` variant of this image bundles Perl and
+[Plack](http://plackperl.org) with Perl FastCGI support.
+
+The default `Caddyfile` doesn't include any configuration, so, if you want to
+use it, you should use a custom config.
+
+E.g., to run `.pl` paths against a Plack app in the normal web root:
+
+```
+  fastcgi / 127.0.0.1:8888 {
+    ext .pl
+    split .pl
+  }
+  on startup plackup -s FCGI -E deployment /srv/app.psgi &
+```
+
+#### Perl customization
+
+The Perl Dockerfile supports several build args, all of which are
+space-separated lists.  Except for `perl_modules`, which is a list of Perl
+module names (e.g. `Crypt::Blowfish`), elements of the lists are Alpine Linux
+package names.  Defaults are in parentheses:
+
+These ones have defaults that proably don't need to be modified:
+
+- `build_apks` APKs used for building those modules `(gcc g++ make git patch perl perl-dev curl wget)`
+- `perl_apks` APKs for Perl at runtime `(perl perl-plack)`
+- `fcgi_apks` APKs for FastCGI at runtime `(fcgi perl-fcgi perl-fcgi-procmanager)`
+
+And these are the ones that allow adding functionality:
+
+- `perl_modules` extra Perl modules to build and install (using [cpanm][cpanm]) `()`
+- `extra_build_apks` APKs for building those modules `()`
+- `extra_apks` APKs needed at runtime `()`
+
+E.g.:
+
+```sh
+docker build --build-arg=perl_modules=CGI::Compile \
+  --build-arg=extra_apks=perl-cgi-emulate-psgi \
+  -t benizi/caddy:perl-old-cgi - < perl/Dockerfile
+```
+
+Then `benizi/caddy:perl-old-cgi` contains everything needed to run standard
+Plack apps served via FastCGI, but also old Perl CGI scripts via
+`CGI::Compile`'s emulation.
+
 ### Using git sources
 
 Caddy can serve sites from git repository using [git](https://caddyserver.com/docs/http.git) plugin.
