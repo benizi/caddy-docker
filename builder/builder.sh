@@ -31,10 +31,22 @@ clone() {
   local users=$1 repo=$2
   shift 2
   local github=${users%%:*} go=${users##*:}
-  git clone --depth 1 https://"$(pkg $github $repo)" "$(gosrc $go $repo)"
-  test -n "$1" || return 0
+  local src=https://"$(pkg $github $repo)" dst="$(gosrc $go $repo)"
+  local shallow ref= branch=
+  if test -n "$1"
+  then
+    ref=$1
+    # set branch arg if the ref is a branch on the remote end
+    if git ls-remote --heads "$src" "$ref" 2>/dev/null | grep -q .
+    then branch="-b $ref"
+    fi
+  fi
+  # can shallow-clone unless ref is specified and is not a branch
+  local shallow='--depth 1'
+  test -z "$ref" || test -n "$branch" || shallow=
+  git clone $shallow $branch "$src" "$dst"
   cd "$(gosrc $go $repo)"
-  git checkout --force "$1"
+  git checkout --force "${ref:-master}"
 }
 
 {
