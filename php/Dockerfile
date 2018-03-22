@@ -3,11 +3,10 @@
 #
 FROM benizi/caddy:builder as builder
 
-ARG repo="benizi"
-ARG version="0.10.11"
-ARG plugins="git"
+ARG upstream="benizi"
+ARG version="v0.10.11"
 
-RUN REPO=${repo} VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
+RUN upstream=$upstream /bin/sh /usr/bin/builder.sh $version
 
 #
 # Final stage
