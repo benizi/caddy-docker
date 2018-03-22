@@ -6,7 +6,7 @@ FROM benizi/caddy:builder as builder
 ARG upstream="benizi"
 ARG version="v0.10.11"
 
-RUN upstream=$upstream /bin/sh /usr/bin/builder.sh $version
+RUN upstream=$upstream /build $version
 
 #
 # Final stage
