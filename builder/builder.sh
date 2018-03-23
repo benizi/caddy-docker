@@ -46,7 +46,7 @@ clone() {
   fi
   # can shallow-clone unless a checkout is required
   $checkout || set -- "$@" --depth 1
-  git clone "$@" "$src" "$dst"
+  git clone -o $github "$@" "$src" "$dst"
   $checkout || return 0
   cd "$(gosrc $go $repo)"
   git checkout --force $ref
