@@ -14,7 +14,7 @@ RUN upstream=$upstream /build $version
 FROM alpine:3.7
 LABEL maintainer "Benjamin R. Haskell <docker@benizi.com>"
 
-ARG version="0.10.11"
+ARG version="v0.10.11"
 LABEL caddy_version="$version"
 
 RUN apk add --no-cache openssh-client git tar php7-fpm curl
